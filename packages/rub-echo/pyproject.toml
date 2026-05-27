@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rub-echo"
+version = "0.1.0"
+description = "Echo adapter for Rub — end-to-end validation of the plugin pipeline"
+requires-python = ">= 3.12"
+license = "MIT"
+dependencies = [
+    "rub",
+]
+
+[project.entry-points.'rub.adapters']
+echo = "rub_echo.adapter:EchoAdapter"
+
+[project.scripts]
+echo = "rub_echo.__main__:app"
+
+[tool.hatch.build.targets.wheel]
+sources = ["src"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
