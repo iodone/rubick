@@ -88,19 +88,16 @@ def _emit(envelope: OutputEnvelope, *, fmt: str = "json") -> None:
         typer.echo(envelope.model_dump_json(indent=2, exclude_none=True))
 
 
-class _StandaloneCommand(click.Command):
-    """Click command that intercepts -h before normal parsing.
+class _StandaloneGroup(typer.core.TyperGroup):
+    """Click group that intercepts -h and treats all args as belonging
+    to the default callback command (no subcommand routing).
 
     This lets ``echo -h`` trigger discovery and ``echo greet -h``
     trigger inspect, rather than Click consuming -h as a help flag.
+    It also ensures single-segment names like ``finance`` are passed
+    as the ``operation`` argument instead of being rejected as
+    "No such command".
     """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        # Typer may pass extra kwargs like rich_markup_mode that
-        # base click.Command doesn't recognize — absorb them.
-        kwargs.pop("rich_markup_mode", None)
-        kwargs.pop("rich_help_panel", None)
-        super().__init__(*args, **kwargs)
 
     def parse_args(self, ctx: click.Context, args: list[str]) -> list[str]:
         # Extract -h from args before Click sees it
@@ -112,6 +109,17 @@ class _StandaloneCommand(click.Command):
             ctx.ensure_object(dict)
             ctx.obj["api_help"] = False
         return super().parse_args(ctx, args)
+
+    def resolve_command(
+        self, ctx: click.Context, args: list[str]
+    ) -> tuple[str | None, click.Command | None, list[str]]:
+        # Always route to the default (callback) command — do not
+        # try to interpret the first arg as a subcommand name.
+        cmd_name = self.name
+        cmd = self.commands.get(cmd_name)
+        if cmd is not None:
+            return cmd_name, cmd, args
+        return super().resolve_command(ctx, args)
 
 
 def standalone_cli(
@@ -135,6 +143,7 @@ def standalone_cli(
 
     app = typer.Typer(
         name=cli_name,
+        cls=_StandaloneGroup,
         help=(
             f"{cli_name} — standalone API CLI.\n\n"
             f"Usage:\n\n"
@@ -148,7 +157,7 @@ def standalone_cli(
         context_settings={"help_option_names": ["--help"]},
     )
 
-    @app.command(cls=_StandaloneCommand)  # type: ignore[arg-type]
+    @app.callback()  # type: ignore[arg-type]
     def main(
         ctx: typer.Context,
         operation: str | None = typer.Argument(
