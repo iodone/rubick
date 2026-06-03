@@ -64,14 +64,14 @@ def render_inspect_panel(envelope: OutputEnvelope) -> None:
     display_name = detail.get("display_name") or op_id
     description = detail.get("description", "")
     return_type = detail.get("return_type", "")
-    params = detail.get("parameters", [])
+    params = list(detail.get("parameters", []))
 
     # Fall back to input_schema properties when parameters is empty
     if not params:
         input_schema = detail.get("input_schema") or {}
         schema_props = input_schema.get("properties", {})
         if schema_props:
-            schema_required = set(input_schema.get("required", []))
+            schema_required = set(input_schema.get("required") or [])
             for prop_name, prop_def in schema_props.items():
                 params.append({
                     "name": prop_name,
