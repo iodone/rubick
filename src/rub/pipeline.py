@@ -243,6 +243,44 @@ async def run_pipeline(
             adapter, url, endpoint=endpoint, cache=cache, ttl=ttl, cli_name=cli_name
         )
     if api_help:
+        # Check if operation matches an exact operation ID; if not, treat it
+        # as a prefix filter and return a filtered discovery instead of a
+        # bare "Operation: {op}" inspect panel.
+        all_ops = await adapter.list_operations(url)
+        exact = any(op.operation_id == operation for op in all_ops)
+        if exact:
+            return await inspect(
+                adapter,
+                url,
+                operation,
+                endpoint=endpoint,
+                cache=cache,
+                ttl=ttl,
+                cli_name=cli_name,
+            )
+        # Prefix match — return filtered discovery
+        matches = [
+            op for op in all_ops
+            if op.operation_id.startswith(operation + ".")
+        ]
+        if matches:
+            data = {
+                "operations": [op.model_dump() for op in matches],
+                "count": len(matches),
+                "examples": (
+                    [f"{cli_name} {endpoint} {matches[0].operation_id} key=value"]
+                    if matches
+                    else []
+                ),
+            }
+            protocol = await adapter.protocol_name()
+            return OutputEnvelope.success(
+                kind="discovery",
+                protocol=protocol,
+                endpoint=endpoint,
+                data=data,
+            )
+        # No matches — fall through to inspect (will show not-found error)
         return await inspect(
             adapter,
             url,
