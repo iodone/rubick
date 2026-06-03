@@ -66,6 +66,21 @@ def render_inspect_panel(envelope: OutputEnvelope) -> None:
     return_type = detail.get("return_type", "")
     params = detail.get("parameters", [])
 
+    # Fall back to input_schema properties when parameters is empty
+    if not params:
+        input_schema = detail.get("input_schema") or {}
+        schema_props = input_schema.get("properties", {})
+        if schema_props:
+            schema_required = set(input_schema.get("required", []))
+            for prop_name, prop_def in schema_props.items():
+                params.append({
+                    "name": prop_name,
+                    "param_type": prop_def.get("type", "string"),
+                    "required": prop_name in schema_required,
+                    "description": prop_def.get("description", ""),
+                    "default": prop_def.get("default"),
+                })
+
     # Build content lines
     lines: list[str] = []
     if description:
