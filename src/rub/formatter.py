@@ -132,6 +132,14 @@ def render_inspect_panel(envelope: OutputEnvelope) -> None:
         console.print("[bold]Parameters:[/bold]")
         console.print(param_table)
 
+    # Invocation examples
+    examples = detail.get("invocation_examples") or []
+    if examples:
+        console.print()
+        console.print("[bold]Examples:[/bold]")
+        for ex in examples:
+            console.print(f"  [dim]$[/dim] [green]{ex}[/green]")
+
     if envelope.meta and envelope.meta.cached:
         console.print("[dim]  (cached)[/dim]")
 
