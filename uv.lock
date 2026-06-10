@@ -338,52 +338,6 @@ wheels = [
 ]
 
 [[package]]
-name = "mi-rub"
-source = { editable = "." }
-dependencies = [
-    { name = "aiosqlite" },
-    { name = "httpx" },
-    { name = "loguru" },
-    { name = "pluggy" },
-    { name = "pydantic" },
-    { name = "pydantic-settings" },
-    { name = "rich" },
-    { name = "typer" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "black" },
-    { name = "mypy" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "pytest-cov" },
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "aiosqlite", specifier = ">=0.19" },
-    { name = "httpx", specifier = ">=0.27" },
-    { name = "loguru", specifier = ">=0.7.2" },
-    { name = "pluggy", specifier = ">=1.3" },
-    { name = "pydantic", specifier = ">=2.0" },
-    { name = "pydantic-settings", specifier = ">=2.0" },
-    { name = "rich", specifier = ">=13.0" },
-    { name = "typer", specifier = ">=0.9" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "black", specifier = ">=24.0" },
-    { name = "mypy", specifier = ">=1.10" },
-    { name = "pytest", specifier = ">=8.0" },
-    { name = "pytest-asyncio", specifier = ">=0.23" },
-    { name = "pytest-cov", specifier = ">=5.0" },
-    { name = "ruff", specifier = ">=0.4" },
-]
-
-[[package]]
 name = "mypy"
 version = "1.20.0"
 source = { registry = "https://pkgs.d.xiaomi.net/artifactory/api/pypi/pypi-virtual/simple" }
@@ -672,6 +626,54 @@ dependencies = [
 sdist = { url = "https://pkgs.d.xiaomi.net/artifactory/api/pypi/pypi-virtual/packages/packages/b3/c6/f3b320c27991c46f43ee9d856302c70dc2d0fb2dba4842ff739d5f46b393/rich-14.3.3.tar.gz", hash = "sha256:b8daa0b9e4eef54dd8cf7c86c03713f53241884e814f4e2f5fb342fe520f639b" }
 wheels = [
     { url = "https://pkgs.d.xiaomi.net/artifactory/api/pypi/pypi-virtual/packages/packages/14/25/b208c5683343959b670dc001595f2f3737e051da617f66c31f7c4fa93abc/rich-14.3.3-py3-none-any.whl", hash = "sha256:793431c1f8619afa7d3b52b2cdec859562b950ea0d4b6b505397612db8d5362d" },
+]
+
+[[package]]
+name = "rub"
+source = { editable = "." }
+dependencies = [
+    { name = "aiosqlite" },
+    { name = "click" },
+    { name = "httpx" },
+    { name = "loguru" },
+    { name = "pluggy" },
+    { name = "pydantic" },
+    { name = "pydantic-settings" },
+    { name = "rich" },
+    { name = "typer" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "black" },
+    { name = "mypy" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "aiosqlite", specifier = ">=0.19" },
+    { name = "click", specifier = ">=8.0" },
+    { name = "httpx", specifier = ">=0.27" },
+    { name = "loguru", specifier = ">=0.7.2" },
+    { name = "pluggy", specifier = ">=1.3" },
+    { name = "pydantic", specifier = ">=2.0" },
+    { name = "pydantic-settings", specifier = ">=2.0" },
+    { name = "rich", specifier = ">=13.0" },
+    { name = "typer", specifier = ">=0.9" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "black", specifier = ">=24.0" },
+    { name = "mypy", specifier = ">=1.10" },
+    { name = "pytest", specifier = ">=8.0" },
+    { name = "pytest-asyncio", specifier = ">=0.23" },
+    { name = "pytest-cov", specifier = ">=5.0" },
+    { name = "ruff", specifier = ">=0.4" },
 ]
 
 [[package]]
